@@ -1,14 +1,26 @@
 /*
  * Create a list that holds all of your cards
  */
-
-
+let allCards = document.getElementsByClassName("card");
+let cards = [...allCards];
+let deck = document.getElementById("deck-id");
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
+shuffle(cards);
+// console.log(...cards);
+deck.innerHTML = "";
+
+for(let i=0; i<cards.length; i++){
+	deck.appendChild(cards[i]);
+}
+// let abs = document.createElement('p');
+// document.getElementById("card-deck").appendChild(abs);
+// document.getElementById("deck-id").appendChild(abs);
+
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -23,6 +35,10 @@ function shuffle(array) {
     }
 
     return array;
+}
+
+function startMemory(){
+	shuffle(cards);
 }
 
 
