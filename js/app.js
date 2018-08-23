@@ -46,10 +46,13 @@ function startMemory(){
 
 
 // let card1 = document.getElementById("card1");
-deck.addEventListener("click", listener);
+deck.addEventListener("click", clickCard);
 
-function listener(event){
+function clickCard(event){
     event.target.classList.add("open", "show");
+    let childI = event.target.childNodes[1];
+    let icon = childI.classList;
+    console.log(icon);
 }
 
 /*
