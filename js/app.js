@@ -12,23 +12,9 @@
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
- shuffle(cards);
-// console.log(...cards);
-deck.innerHTML = "";
 
-const fragment = document.createDocumentFragment();
-
-for(let i=0; i<cards.length; i++){
-	fragment.appendChild(cards[i]);
-}
-deck.appendChild(fragment);
-// let abs = document.createElement('p');
-// document.getElementById("card-deck").appendChild(abs);
-// document.getElementById("deck-id").appendChild(abs);
-
-
-// Shuffle function from http://stackoverflow.com/a/2450976
-function shuffle(array) {
+ // Shuffle function from http://stackoverflow.com/a/2450976
+ function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
     while (currentIndex !== 0) {
@@ -41,40 +27,71 @@ function shuffle(array) {
 
     return array;
 }
+shuffle(cards);
+deck.innerHTML = "";
 
+// creating a fragment to apend to deck
+const fragment = document.createDocumentFragment();
+for(let i=0; i<cards.length; i++){
+	fragment.appendChild(cards[i]);
+}
+deck.appendChild(fragment);
+
+// start of the game
 function startMemory(){
 	shuffle(cards);
 }
 
+// add EventListener to deck
 deck.addEventListener("click", clickCard);
 
 function clickCard(event){
-    noOfCardsFlipped ++;    
-    if (event.target.nodeName === 'LI') {
-        let cardFlipped = event.target;
-        cardFlipped.classList.add("open", "show");
-        //let child1 = cardFlipped.childNodes[1];
-        //let childClasses = child1.classList; 
-       // if(noOfCardsFlipped < 3){
-            compareSymbols(cardFlipped);
-    }  
+    noOfCardsFlipped ++;  
+//  EventListener waits for li-elements to be clicked
+if (event.target.nodeName === 'LI') {
+    let cardFlipped = event.target;
+ // adding classes open and show to card       
+ cardFlipped.classList.add("open", "show");
+ compareSymbols(cardFlipped);
+}  
 }
 
 function compareSymbols(cardsFlipped){
-    if(noOfCardsFlipped < 3){
-        symbol.push(cardsFlipped);
-    }
-    if(noOfCardsFlipped == 2){
-       if(symbol[0].childNodes[1].classList.value == symbol[1].childNodes[1].classList.value){
-            console.log("true");
-        }
-        else{
-            console.log("false");
-            console.log(symbol[0].childNodes[1].classList);
-            console.log(symbol[1].childNodes[1].classList);
-        }
-    }
-    return;
+if(noOfCardsFlipped < 3){
+ // the first two valid clicks fill the symbol-Array       
+ symbol.push(cardsFlipped);
+}
+if(noOfCardsFlipped == 2){
+// are the classes df <i> identical?       
+if(symbol[0].childNodes[1].classList.value == symbol[1].childNodes[1].classList.value){
+    console.log("true");
+    didMatch();
+
+}
+	else{
+	    console.log("false");
+	    setTimeout(didNotMatch, 1000);
+	}
+	}
+return;
+}
+
+// classes of matching cards are set to match
+function didMatch(){
+    symbol[0].classList.add("match");
+    symbol[1].classList.add("match");
+    symbol[0].classList.remove("open", "show");
+    symbol[1].classList.remove("open", "show");
+    noOfCardsFlipped = 0;
+    symbol = [];
+}
+
+// classes of non matching cards are set to open and show
+function didNotMatch(){
+    symbol[0].classList.remove("open", "show");
+    symbol[1].classList.remove("open", "show");
+    noOfCardsFlipped = 0;
+    symbol = [];
 }
 
 /*
