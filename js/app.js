@@ -4,7 +4,7 @@
  let allCards = document.getElementsByClassName("card");
  let cards = [...allCards];
  let deck = document.getElementById("deck-id");
- let noOfCardsFlipped = 0;
+ let restart = document.getElementsByClassName("restart");
  let symbol = new Array;
 /*
  * Display the cards on the page
@@ -15,20 +15,20 @@
 
  // Shuffle function from http://stackoverflow.com/a/2450976
  function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+ 	var currentIndex = array.length, temporaryValue, randomIndex;
 
-    while (currentIndex !== 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-    }
+ 	while (currentIndex !== 0) {
+ 		randomIndex = Math.floor(Math.random() * currentIndex);
+ 		currentIndex -= 1;
+ 		temporaryValue = array[currentIndex];
+ 		array[currentIndex] = array[randomIndex];
+ 		array[randomIndex] = temporaryValue;
+ 	}
 
-    return array;
-}
-shuffle(cards);
-deck.innerHTML = "";
+ 	return array;
+ }
+ shuffle(cards);
+ deck.innerHTML = "";
 
 // creating a fragment to apend to deck
 const fragment = document.createDocumentFragment();
@@ -45,53 +45,66 @@ function startMemory(){
 // add EventListener to deck
 deck.addEventListener("click", clickCard);
 
-function clickCard(event){
-    noOfCardsFlipped ++;  
+// add EventListener to restart
+restart[0].addEventListener("click", resetBoard);
+
+function clickCard(event){  
 //  EventListener waits for li-elements to be clicked
 if (event.target.nodeName === 'LI') {
-    let cardFlipped = event.target;
- // adding classes open and show to card       
+	let cardFlipped = event.target;
+ // adding classes open and show to card   
+ if(symbol.length < 2){    
  cardFlipped.classList.add("open", "show");
  compareSymbols(cardFlipped);
+}
 }  
 }
 
+function resetBoard(){
+	location.reload();
+}
+
 function compareSymbols(cardsFlipped){
-if(noOfCardsFlipped < 3){
- // the first two valid clicks fill the symbol-Array       
+if(symbol.length == 0){
+ // the first valid clicks goes into the symbol-Array       
  symbol.push(cardsFlipped);
 }
-if(noOfCardsFlipped == 2){
+if(symbol.length == 1){
+	if(symbol[0].id != cardsFlipped.id) {
+ // the second valid clicks goes into the symbol-Array        
+ symbol.push(cardsFlipped);
+}
+}
+if(symbol.length == 2){
 // are the classes df <i> identical?       
 if(symbol[0].childNodes[1].classList.value == symbol[1].childNodes[1].classList.value){
-    console.log("true");
-    didMatch();
+	console.log(symbol[0]);
+	didMatch();
 
 }
-	else{
-	    console.log("false");
-	    setTimeout(didNotMatch, 1000);
-	}
-	}
+else{
+	console.log("false");
+	console.log(symbol[0].id);
+	setTimeout(didNotMatch, 1000);
+}
+}
 return;
 }
 
 // classes of matching cards are set to match
 function didMatch(){
-    symbol[0].classList.add("match");
-    symbol[1].classList.add("match");
-    symbol[0].classList.remove("open", "show");
-    symbol[1].classList.remove("open", "show");
-    noOfCardsFlipped = 0;
-    symbol = [];
+	symbol[0].classList.add("match");
+	symbol[1].classList.add("match");
+	symbol[0].classList.remove("open", "show");
+	symbol[1].classList.remove("open", "show");
+	symbol = [];
 }
 
 // classes of non matching cards are set to open and show
 function didNotMatch(){
-    symbol[0].classList.remove("open", "show");
-    symbol[1].classList.remove("open", "show");
-    noOfCardsFlipped = 0;
-    symbol = [];
+	symbol[0].classList.remove("open", "show");
+	symbol[1].classList.remove("open", "show");
+	symbol = [];
 }
 
 /*
