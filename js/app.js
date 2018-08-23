@@ -1,16 +1,18 @@
 /*
  * Create a list that holds all of your cards
  */
-let allCards = document.getElementsByClassName("card");
-let cards = [...allCards];
-let deck = document.getElementById("deck-id");
+ let allCards = document.getElementsByClassName("card");
+ let cards = [...allCards];
+ let deck = document.getElementById("deck-id");
+ let noOfCardsFlipped = 0;
+ let symbol = new Array;
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
-shuffle(cards);
+ shuffle(cards);
 // console.log(...cards);
 deck.innerHTML = "";
 
@@ -44,15 +46,35 @@ function startMemory(){
 	shuffle(cards);
 }
 
-
-// let card1 = document.getElementById("card1");
 deck.addEventListener("click", clickCard);
 
 function clickCard(event){
-    event.target.classList.add("open", "show");
-    let childI = event.target.childNodes[1];
-    let icon = childI.classList;
-    console.log(icon);
+    noOfCardsFlipped ++;    
+    if (event.target.nodeName === 'LI') {
+        let cardFlipped = event.target;
+        cardFlipped.classList.add("open", "show");
+        //let child1 = cardFlipped.childNodes[1];
+        //let childClasses = child1.classList; 
+       // if(noOfCardsFlipped < 3){
+            compareSymbols(cardFlipped);
+    }  
+}
+
+function compareSymbols(cardsFlipped){
+    if(noOfCardsFlipped < 3){
+        symbol.push(cardsFlipped);
+    }
+    if(noOfCardsFlipped == 2){
+       if(symbol[0].childNodes[1].classList.value == symbol[1].childNodes[1].classList.value){
+            console.log("true");
+        }
+        else{
+            console.log("false");
+            console.log(symbol[0].childNodes[1].classList);
+            console.log(symbol[1].childNodes[1].classList);
+        }
+    }
+    return;
 }
 
 /*
