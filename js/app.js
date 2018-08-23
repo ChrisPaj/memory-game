@@ -14,9 +14,12 @@ shuffle(cards);
 // console.log(...cards);
 deck.innerHTML = "";
 
+const fragment = document.createDocumentFragment();
+
 for(let i=0; i<cards.length; i++){
-	deck.appendChild(cards[i]);
+	fragment.appendChild(cards[i]);
 }
+deck.appendChild(fragment);
 // let abs = document.createElement('p');
 // document.getElementById("card-deck").appendChild(abs);
 // document.getElementById("deck-id").appendChild(abs);
@@ -41,6 +44,13 @@ function startMemory(){
 	shuffle(cards);
 }
 
+
+// let card1 = document.getElementById("card1");
+deck.addEventListener("click", listener);
+
+function listener(event){
+    event.target.classList.add("open", "show");
+}
 
 /*
  * set up the event listener for a card. If a card is clicked:
