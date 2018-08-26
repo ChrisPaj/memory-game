@@ -6,6 +6,14 @@
  let deck = document.getElementById("deck-id");
  let restart = document.getElementsByClassName("restart");
  let symbol = new Array;
+ let time = "2 min 22 s";
+ let moves = 18;
+ let stars = 2;
+ let winnerDiv = document.createElement("DIV");
+ winnerDiv.id = "winner-div";
+ //let winnertext = document.createTextNode(`<h2>Congratulations, you won!!</h2> It took you ${time} and ${moves} moves to complete the game, <br> which makes ${stars} Stars`);       // Create a text node
+//winnerDiv.appendChild(winnertext);                                          // Append the text to <p>
+//deck.appendChild(winnerDiv); 
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -28,7 +36,7 @@
  	return array;
  }
  shuffle(cards);
- deck.innerHTML = "";
+
 
 // creating a fragment to apend to deck
 const fragment = document.createDocumentFragment();
@@ -47,6 +55,7 @@ deck.addEventListener("click", clickCard);
 
 // add EventListener to restart
 restart[0].addEventListener("click", resetBoard);
+restart[1].addEventListener("click", resetBoard);
 
 function clickCard(event){  
 //  EventListener waits for li-elements to be clicked
@@ -54,9 +63,9 @@ if (event.target.nodeName === 'LI') {
 	let cardFlipped = event.target;
  // adding classes open and show to card   
  if(symbol.length < 2){    
- cardFlipped.classList.add("open", "show");
- compareSymbols(cardFlipped);
-}
+ 	cardFlipped.classList.add("open", "show");
+ 	compareSymbols(cardFlipped);
+ }
 }  
 }
 
@@ -65,7 +74,7 @@ function resetBoard(){
 }
 
 function compareSymbols(cardsFlipped){
-if(symbol.length == 0){
+	if(symbol.length == 0){
  // the first valid clicks goes into the symbol-Array       
  symbol.push(cardsFlipped);
 }
@@ -76,7 +85,7 @@ if(symbol.length == 1){
 }
 }
 if(symbol.length == 2){
-// are the classes df <i> identical?       
+// are the classes of <i> identical?       
 if(symbol[0].childNodes[1].classList.value == symbol[1].childNodes[1].classList.value){
 	console.log(symbol[0]);
 	didMatch();
@@ -106,6 +115,15 @@ function didNotMatch(){
 	symbol[1].classList.remove("open", "show");
 	symbol = [];
 }
+
+function winnerScreen(){
+deck.innerHTML = "";
+winnerDiv.innerHTML = `<h2>Congratulations, you won!!</h2> 
+It took you ${time} and ${moves} moves to complete the game, <br> which makes ${stars} Stars
+<br><br><div class="restart" id="play-again">Play again <br><i class="fa fa-repeat"></i></div>`;   
+deck.appendChild(winnerDiv); 
+}
+
 
 /*
  * set up the event listener for a card. If a card is clicked:
