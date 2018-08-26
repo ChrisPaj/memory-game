@@ -9,11 +9,10 @@
  let time = "2 min 22 s";
  let moves = 18;
  let stars = 2;
+ let noOfMatches = 6;
+ let noOfMoves = 0;
  let winnerDiv = document.createElement("DIV");
  winnerDiv.id = "winner-div";
- //let winnertext = document.createTextNode(`<h2>Congratulations, you won!!</h2> It took you ${time} and ${moves} moves to complete the game, <br> which makes ${stars} Stars`);       // Create a text node
-//winnerDiv.appendChild(winnertext);                                          // Append the text to <p>
-//deck.appendChild(winnerDiv); 
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -35,7 +34,7 @@
 
  	return array;
  }
- shuffle(cards);
+// shuffle(cards);
 
 
 // creating a fragment to apend to deck
@@ -55,7 +54,9 @@ deck.addEventListener("click", clickCard);
 
 // add EventListener to restart
 restart[0].addEventListener("click", resetBoard);
-restart[1].addEventListener("click", resetBoard);
+if(restart[1]){
+	restart[1].addEventListener("click", resetBoard);
+}
 
 function clickCard(event){  
 //  EventListener waits for li-elements to be clicked
@@ -107,6 +108,10 @@ function didMatch(){
 	symbol[0].classList.remove("open", "show");
 	symbol[1].classList.remove("open", "show");
 	symbol = [];
+	noOfMatches ++;
+	if (noOfMatches == 8){
+		setTimeout(winnerScreen, 1000);
+	}
 }
 
 // classes of non matching cards are set to open and show
@@ -117,11 +122,11 @@ function didNotMatch(){
 }
 
 function winnerScreen(){
-deck.innerHTML = "";
-winnerDiv.innerHTML = `<h2>Congratulations, you won!!</h2> 
-It took you ${time} and ${moves} moves to complete the game, <br> which makes ${stars} Stars
-<br><br><div class="restart" id="play-again">Play again <br><i class="fa fa-repeat"></i></div>`;   
-deck.appendChild(winnerDiv); 
+	deck.innerHTML = "";
+	winnerDiv.innerHTML = `<h2>Congratulations, you won!!</h2> 
+	It took you ${time} and ${moves} moves to complete the game, <br> which makes ${stars} Stars
+	<br><br><a href="#" onclick="resetBoard()"> Play again </a>`;   
+	deck.appendChild(winnerDiv); 
 }
 
 
