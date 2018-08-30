@@ -3,20 +3,39 @@
  */
  let allCards = document.getElementsByClassName("card");
  let cards = [...allCards];
- console.log("noOfCards: " + JSON.stringify(cards[0]));
  let deck = document.getElementById("deck-id");
  let restart = document.getElementsByClassName("restart");
  let symbol = new Array;
  let time = "2 min 22 s";
  let moves = 0;
- let stars = 3;
+ let stars = 5;
  let noOfMatches = 0;
  let noOfMoves = 0;
-
+ let noOfSeconds = 0;
+ let noOfMinutes = 0;
  let noOfMovesSpan = document.querySelector(".moves");
  let noOfStarsShown = document.getElementsByClassName("fa-star");
+ let timerSpan = document.getElementById("timer");
+ let t;
 
  let winnerDiv = document.createElement("DIV");
+
+ function showTimer(){
+ 	noOfSeconds++;
+ 	if(noOfSeconds === 60){
+ 		noOfSeconds = 0;
+ 		noOfMinutes ++;		
+ 	}
+ 	timerSpan.textContent = (noOfMinutes < 10 ? "0" + noOfMinutes : noOfMinutes) + ":" + (noOfSeconds < 10 ? "0" + noOfSeconds : noOfSeconds);
+ 	timer()
+ }
+
+ function timer() {
+ 	t = setTimeout(showTimer, 1000);
+ }
+ timer();
+ 
+ 
 
  // Shuffle function from http://stackoverflow.com/a/2450976
  function shuffle(array) {
@@ -102,8 +121,7 @@ function didMatch(){
 	symbol[1].classList.add("match");
 	symbol[0].classList.remove("open", "show");
 	symbol[1].classList.remove("open", "show");
-	noOfMatches ++;
-	
+	noOfMatches ++;	
 	handleMoves();
 }
 
@@ -114,27 +132,21 @@ function didNotMatch(){
 	handleMoves();
 }
 
-function winnerScreen(){
-	winnerDiv.id = "winner-div";
-	winnerDiv.innerHTML = `<h2>Congratulations, you won!!</h2> 
-	It took you ${time} and ${noOfMoves} moves to complete the game, <br> which makes ${stars} Star(s)
-	<br><br><a href="#" onclick="resetBoard()"> Play again </a>`;
-	deck.innerHTML = "";   
-	deck.appendChild(winnerDiv); 
-}
-
 function handleMoves(){
 	symbol = [];
 	noOfMoves ++;
 	noOfMovesSpan.innerHTML = noOfMoves;
-	if(noOfMoves === 3){
-		toggleStars(2)		
+	if(noOfMoves === 13){
+		toggleStars(4)		
 	}
-	if(noOfMoves === 5){
-		toggleStars(1)		
+	if(noOfMoves === 17){
+		toggleStars(3)		
 	}
 	if(noOfMoves === 20){
-		toggleStars(0)		
+		toggleStars(2)		
+	}
+	if(noOfMoves === 22){
+		toggleStars(1)		
 	}
 	if (noOfMatches == 8){
 		setTimeout(winnerScreen, 1000);
@@ -145,6 +157,15 @@ function toggleStars(i){
 	noOfStarsShown[i].classList.add("fa-star-o");
 	noOfStarsShown[i].classList.remove("fa-star");
 	stars--;
+}
+
+function winnerScreen(){
+	winnerDiv.id = "winner-div";
+	winnerDiv.innerHTML = `<h2>Congratulations, you won!!</h2> 
+	It took you ${time} and ${noOfMoves} moves to complete the game, <br> which makes ${stars} Star(s)
+	<br><br><a href="#" onclick="resetBoard()"> Play again </a>`;
+	deck.innerHTML = "";   
+	deck.appendChild(winnerDiv); 
 }
 
 
