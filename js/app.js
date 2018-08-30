@@ -17,55 +17,57 @@
  let noOfStarsShown = document.getElementsByClassName("fa-star");
  let timerSpan = document.getElementById("timer");
  let t;
+ let firstClick = 0;
 
  let winnerDiv = document.createElement("DIV");
 
- function showTimer(){
- 	noOfSeconds++;
- 	if(noOfSeconds === 60){
- 		noOfSeconds = 0;
- 		noOfMinutes ++;		
- 	}
- 	timerSpan.textContent = (noOfMinutes < 10 ? "0" + noOfMinutes : noOfMinutes) + ":" + (noOfSeconds < 10 ? "0" + noOfSeconds : noOfSeconds);
- 	timer()
- }
+ startGame();
 
- function timer() {
- 	t = setTimeout(showTimer, 1000);
- }
- timer();
- 
- 
+ function startGame(){
+	shuffle(cards);
+	appendFragment();
+	addListener();
+}
 
- // Shuffle function from http://stackoverflow.com/a/2450976
- function shuffle(array) {
- 	var currentIndex = array.length, temporaryValue, randomIndex;
+// Shuffle function from http://stackoverflow.com/a/2450976
+function shuffle(array) {
+	var currentIndex = array.length, temporaryValue, randomIndex;
 
- 	while (currentIndex !== 0) {
- 		randomIndex = Math.floor(Math.random() * currentIndex);
- 		currentIndex -= 1;
- 		temporaryValue = array[currentIndex];
- 		array[currentIndex] = array[randomIndex];
- 		array[randomIndex] = temporaryValue;
- 	}
+	while (currentIndex !== 0) {
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex -= 1;
+		temporaryValue = array[currentIndex];
+		array[currentIndex] = array[randomIndex];
+		array[randomIndex] = temporaryValue;
+	}
 
- 	return array;
- }
-// shuffle(cards);
+	return array;
+}
 
+function showTimer(){
+	noOfSeconds++;
+	if(noOfSeconds === 60){
+		noOfSeconds = 0;
+		noOfMinutes ++;		
+	}
+	timerSpan.textContent = (noOfMinutes < 10 ? "0" + noOfMinutes : noOfMinutes) + ":" + (noOfSeconds < 10 ? "0" + noOfSeconds : noOfSeconds);
+	timer()
+}
 
+function timer() {
+	t = setTimeout(showTimer, 1000);
+}
+
+function appendFragment(){
 // creating a fragment to apend to deck
 const fragment = document.createDocumentFragment();
 for(let i=0; i<cards.length; i++){
 	fragment.appendChild(cards[i]);
 }
 deck.appendChild(fragment);
-
-// start of the game
-function startMemory(){
-	shuffle(cards);
 }
 
+function addListener(){
 // add EventListener to deck
 deck.addEventListener("click", clickCard);
 
@@ -74,10 +76,16 @@ restart[0].addEventListener("click", resetBoard);
 if(restart[1]){
 	restart[1].addEventListener("click", resetBoard);
 }
+}
 
 function clickCard(event){  
 //  EventListener waits for li-elements to be clicked
 if (event.target.nodeName === 'LI') {
+	firstClick++;
+	if(firstClick === 1){
+		timer();
+	}
+
 	let cardFlipped = event.target;
  // adding classes open and show to card   
  if(symbol.length < 2){    
@@ -136,21 +144,25 @@ function handleMoves(){
 	symbol = [];
 	noOfMoves ++;
 	noOfMovesSpan.innerHTML = noOfMoves;
-	if(noOfMoves === 13){
-		toggleStars(4)		
-	}
-	if(noOfMoves === 17){
-		toggleStars(3)		
-	}
-	if(noOfMoves === 20){
-		toggleStars(2)		
-	}
-	if(noOfMoves === 22){
-		toggleStars(1)		
-	}
-	if (noOfMatches == 8){
-		setTimeout(winnerScreen, 1000);
-	}
+// after 13 times searching for matches the 5th star gets white	
+if(noOfMoves === 13){
+	toggleStars(4)		
+}
+// after 18 times searching for matches the 4th star gets white		
+if(noOfMoves === 17){
+	toggleStars(3)		
+}
+// after 20 times searching...
+if(noOfMoves === 20){
+	toggleStars(2)		
+}
+if(noOfMoves === 22){
+	toggleStars(1)		
+}
+if (noOfMatches == 8){
+	clearTimeout(t);
+	setTimeout(winnerScreen, 1000);
+}
 }
 
 function toggleStars(i){
@@ -162,20 +174,8 @@ function toggleStars(i){
 function winnerScreen(){
 	winnerDiv.id = "winner-div";
 	winnerDiv.innerHTML = `<h2>Congratulations, you won!!</h2> 
-	It took you ${time} and ${noOfMoves} moves to complete the game, <br> which makes ${stars} Star(s)
-	<br><br><a href="#" onclick="resetBoard()"> Play again </a>`;
+	It took you ${(noOfMinutes < 10 ? "0" + noOfMinutes : noOfMinutes) + " minute(s) and " + (noOfSeconds < 10 ? "0" + noOfSeconds : noOfSeconds)} seconds to complete the game with ${noOfMoves} moves. <br> Your rating: ${stars} Star(s)
+	<br><br><a href="#" id="anchor" onclick="resetBoard()"> Play again </a>`;
 	deck.innerHTML = "";   
 	deck.appendChild(winnerDiv); 
 }
-
-
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */

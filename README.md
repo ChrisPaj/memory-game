@@ -1,20 +1,24 @@
-# Memory Game Project
+# Memory Game
 
-## Table of Contents
+## What is this game about?
+Memory game aims to keep your memorial fitness on a high level.
+Just try to remember the position of 8 different symbols in a grid of 16 cards.
 
-* [Instructions](#instructions)
-* [Contributing](#contributing)
+## How to install this memory game
+You may clone or download the game at https://github.com/ChrisPaj/memory-game
+Open the index.html file in your browser.
 
-## Instructions
+## How to play this game
+Just begin by clicking one of the 16 cards. A timer will start. 
+Now click on some other card and see, if the two cards match. 
+If not, try to remember, which card was showing which symbol.
+If two cards are matching, they will remain turned over. After finding 
+all 8 matches you will be told how long it took you and what rating you are getting.
 
-The starter project has some HTML and CSS styling to display a static version of the Memory Game project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
+## Main features
+* self shuffeling cards for every new try
+* stopwatch to let you know how long you are on
+* rating system of stars
+* pop-up modal when game is finished showing all stats
 
-To get started, open `js/app.js` and start building out the app's functionality
 
-For specific, detailed instructions, look at the project instructions in the [Udacity Classroom](https://classroom.udacity.com/me).
-
-## Contributing
-
-This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
-
-For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
