@@ -3,6 +3,7 @@
  */
  let allCards = document.getElementsByClassName("card");
  let cards = [...allCards];
+ console.log("noOfCards: " + JSON.stringify(cards[0]));
  let deck = document.getElementById("deck-id");
  let restart = document.getElementsByClassName("restart");
  let symbol = new Array;
@@ -21,11 +22,13 @@
 //siblingMoves.insertAdjacentHTML("afterend", noOfMovesSpan);
 
 let noOfMovesSpan = document.querySelector(".moves");
- let winnerDiv = document.createElement("DIV");
- winnerDiv.id = "winner-div";
- winnerDiv.innerHTML = `<h2>Congratulations, you won!!</h2> 
-	It took you ${time} and ${moves} moves to complete the game, <br> which makes ${stars} Stars
-	<br><br><a href="#" onclick="resetBoard()"> Play again </a>`;
+let winnerDiv = document.createElement("DIV");
+winnerDiv.id = "winner-div";
+winnerDiv.innerHTML = `<h2>Congratulations, you won!!</h2> 
+It took you ${time} and ${moves} moves to complete the game, <br> which makes ${stars} Stars
+<br><br><a href="#" onclick="resetBoard()"> Play again </a>`;
+let noOfStarsShown = document.getElementsByClassName("fa-star");
+
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -120,27 +123,43 @@ function didMatch(){
 	symbol[1].classList.add("match");
 	symbol[0].classList.remove("open", "show");
 	symbol[1].classList.remove("open", "show");
-	symbol = [];
 	noOfMatches ++;
-	noOfMoves ++;
-	noOfMovesSpan.innerHTML = noOfMoves;
 	if (noOfMatches == 8){
 		setTimeout(winnerScreen, 1000);
 	}
+	handleMoves();
 }
 
 // classes of non matching cards are set to open and show
 function didNotMatch(){
 	symbol[0].classList.remove("open", "show");
 	symbol[1].classList.remove("open", "show");
-	symbol = [];
-	noOfMoves ++;
-	noOfMovesSpan.innerHTML = noOfMoves;
+	handleMoves();
 }
 
 function winnerScreen(){
 	deck.innerHTML = "";   
 	deck.appendChild(winnerDiv); 
+}
+
+function handleMoves(){
+	symbol = [];
+	noOfMoves ++;
+	noOfMovesSpan.innerHTML = noOfMoves;
+	if(noOfMoves === 17){
+		toggleStars(2)		
+	}
+	if(noOfMoves === 23){
+		toggleStars(1)		
+	}
+	if(noOfMoves === 29){
+		toggleStars(0)		
+	}
+}
+
+function toggleStars(i){
+	noOfStarsShown[i].classList.add("fa-star-o");
+	noOfStarsShown[i].classList.remove("fa-star");
 }
 
 
