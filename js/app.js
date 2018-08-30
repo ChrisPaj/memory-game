@@ -7,12 +7,25 @@
  let restart = document.getElementsByClassName("restart");
  let symbol = new Array;
  let time = "2 min 22 s";
- let moves = 18;
+ let moves = 0;
  let stars = 2;
- let noOfMatches = 6;
+ let noOfMatches = 0;
  let noOfMoves = 0;
+
+ //let noOfMovesSpan = document.createElement("span");
+ //noOfMovesSpan.classList.add("moves");
+ //noOfMovesSpan.innerHTML = moves;
+ //console.log (noOfMovesSpan);
+
+//let siblingMoves = document.getElementById("stars");
+//siblingMoves.insertAdjacentHTML("afterend", noOfMovesSpan);
+
+let noOfMovesSpan = document.querySelector(".moves");
  let winnerDiv = document.createElement("DIV");
  winnerDiv.id = "winner-div";
+ winnerDiv.innerHTML = `<h2>Congratulations, you won!!</h2> 
+	It took you ${time} and ${moves} moves to complete the game, <br> which makes ${stars} Stars
+	<br><br><a href="#" onclick="resetBoard()"> Play again </a>`;
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -109,6 +122,8 @@ function didMatch(){
 	symbol[1].classList.remove("open", "show");
 	symbol = [];
 	noOfMatches ++;
+	noOfMoves ++;
+	noOfMovesSpan.innerHTML = noOfMoves;
 	if (noOfMatches == 8){
 		setTimeout(winnerScreen, 1000);
 	}
@@ -119,13 +134,12 @@ function didNotMatch(){
 	symbol[0].classList.remove("open", "show");
 	symbol[1].classList.remove("open", "show");
 	symbol = [];
+	noOfMoves ++;
+	noOfMovesSpan.innerHTML = noOfMoves;
 }
 
 function winnerScreen(){
-	deck.innerHTML = "";
-	winnerDiv.innerHTML = `<h2>Congratulations, you won!!</h2> 
-	It took you ${time} and ${moves} moves to complete the game, <br> which makes ${stars} Stars
-	<br><br><a href="#" onclick="resetBoard()"> Play again </a>`;   
+	deck.innerHTML = "";   
 	deck.appendChild(winnerDiv); 
 }
 
